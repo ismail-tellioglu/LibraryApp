@@ -1,4 +1,5 @@
-﻿using Objects.Entities;
+﻿using Objects.Dtos;
+using Objects.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,8 @@ namespace Business
 {
     public interface IBookService
     {
-        List<Books> GetAllBooks();
+        List<BooksDto> GetAllBooks();
+        List<BooksDto> SearchBooks(BookSearchDto criterias);
+        Task<string> CheckOut(CheckOutDto checkOut);
     }
 }

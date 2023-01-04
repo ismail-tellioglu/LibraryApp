@@ -20,7 +20,8 @@ internal class Program
         builder.Services.AddDbContext<LibraryContext>(options => options.UseSqlServer(connection));
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IBookService, BookService>();
-
+        builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+        builder.Services.AddAutoMapper(typeof(MapperProfile));
         var app = builder.Build();
         using (var scope = app.Services.CreateScope())
         {

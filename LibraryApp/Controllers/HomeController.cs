@@ -22,9 +22,27 @@ namespace LibraryApp.Controllers
             return View(new BookSearchDto());
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult SearchBooks(BookSearchDto criterias)
         {
-            return View();
+            var result = bookService.SearchBooks(criterias);
+            return PartialView("~/Views/Shared/_SearchResult.cshtml",result);
+        }
+
+        public IActionResult CheckOut(string isdn)
+        {
+            var md = new CheckOutDto { ISDNToCeheckOut = isdn };
+            return PartialView("~/Views/Shared/_CheckOut.cshtml", md);
+        }
+
+        [HttpPost]
+        public IActionResult CheckOut(CheckOutDto md)
+        {
+            var result = bookService.CheckOut(md).Result;
+            if (result == "Success")
+                return Ok();
+            else
+                return BadRequest(result);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

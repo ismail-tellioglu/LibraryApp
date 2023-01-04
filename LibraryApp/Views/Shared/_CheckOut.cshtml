@@ -1,0 +1,12 @@
+﻿@using Objects.Dtos
+@model CheckOutDto
+
+        <form asp-controller="Home" asp-action="CheckOut" method="post" id="checkout-book-form" class="form-inline">
+            <div class="form-group">
+                <label for="MemberId">Member ID:</label>
+                <input asp-for="MemberId" type="text" class="form-control" />
+                <span asp-validation-for="MemberId" class="input-error"></span>
+            </div>
+            <input asp-for="ISDNToCeheckOut" type="hidden" class="form-control" />
+            <button type="submit" class="btn btn-primary" id="btn-book-checkout">Check Out</button>
+        </form>

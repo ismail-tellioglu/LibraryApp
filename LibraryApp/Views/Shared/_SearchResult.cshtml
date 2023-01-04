@@ -1,0 +1,33 @@
+﻿@using Objects.Dtos
+@model List<BooksDto>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ISDN</th>
+                <th scope="col">Book Name</th>
+                <th scope="col">Author</th>
+                <th scope="col">Availability</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                @{
+                    var isDisabled = item.IsBooked;
+                        <td>@item.ISDN</td>
+                        <td>@item.Title</td>
+                        <td>@item.AuthorName</td>
+                    if(!item.IsBooked){
+                        <td>Available</td>
+                    }
+                    else{
+                        <td>Not Available</td>
+                    }
+                        <td><button type="submit" class="btn btn-primary btn-checkout" disabled="@isDisabled" data-bookid="@item.ISDN">CheckOut</button></td>
+                }
+                </tr>
+            }
+           
+        </tbody>
+        </table>
