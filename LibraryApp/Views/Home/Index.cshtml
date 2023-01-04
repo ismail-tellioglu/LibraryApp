@@ -1,0 +1,38 @@
+﻿@using Objects.Dtos
+@model BookSearchDto
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <h3>Please fill one or more field to search a book!</h3>
+    <div>
+        <form asp-controller="Home" asp-action="Search" method="post" id="search-book-form" class="form-inline">
+            <div class="form-group">
+                <div class="col-sm">
+                <label for="BookName">Name of Book</label>
+                <input asp-for="BookName" type="text" class="form-control"/>
+                <span asp-validation-for="BookName" class="input-error"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="BookName">Author</label>
+                <input asp-for="Author" type="text" class="form-control" />
+                <span asp-validation-for="Author" class="input-error"></span>
+            </div>
+            <div class="form-check">
+                <label for="BookName">ISDN</label>
+                <input asp-for="ISDN" type="text" class="form-control" />
+                <span asp-validation-for="ISDN" class="input-error"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+  @*  <ul>
+        @foreach(var item in Model)
+        {
+            <li>@item.Title</li>
+        }
+    </ul>*@
+</div>
