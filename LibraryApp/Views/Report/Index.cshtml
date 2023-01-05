@@ -15,6 +15,7 @@
                 <th scope="col">Check Out Date</th>
                 <th scope="col">Last Return Date</th>
                 <th scope="col">Is Returned</th>
+                <th scope="col">Remainin Days</th>
                 <th scope="col">Penalty</th>
             </tr>
         </thead>
@@ -37,6 +38,7 @@
                         {
                             <td>Yes</td>
                         }
+                        <td>@item.RemainingDay</td>
                         <td>@item.PenaltyAmount</td>
                     }
                 </tr>

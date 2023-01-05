@@ -9,5 +9,7 @@ namespace Business
     public interface IBusinessHelper
     {
         DateTime CalculateDateAccordingToWorkDays(DateTime startDate, int duration);
+        Decimal CalculatePenalty(int dayCount);
+        int CalculateDayDifferenceAccordingToWorkDays(DateTime date1, DateTime date2);
     }
 }

@@ -20,7 +20,7 @@
     $('#EndDate').datepicker({
         language: "tr",
         format: "dd.mm.yyyy",
-        startDate: "@Model.StartDate.ToString("dd.MM.yyyy")",
+        startDate: "@Model.StartDate.AddDays(1).ToString("dd.MM.yyyy")",
         endDate: "@Model.EndDate.ToString("dd.MM.yyyy")"
     });
 </script>

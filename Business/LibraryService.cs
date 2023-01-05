@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Bogus.DataSets;
 using Db.Interfaces;
 using Objects.Dtos;
 using Objects.Entities;
@@ -9,10 +10,12 @@ namespace Business
     {
         private IUnitOfWork unitOfWork;
         private IMapper mapper;
-        public LibraryService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IBusinessHelper businessHelper;
+        public LibraryService(IUnitOfWork unitOfWork, IMapper mapper, IBusinessHelper helper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.businessHelper = helper;
         }
 
         public List<BooksDto> SearchBooks(BookSearchDto criterias)
@@ -57,11 +60,13 @@ namespace Business
 
         public async Task<DailyReportDto> DailyReport()
         {
-            DailyReportDto dailyReports = new DailyReportDto(); 
+            DailyReportDto dailyReports = new DailyReportDto();
+            DateTime compareDate = businessHelper.CalculateDateAccordingToWorkDays(DateTime.Now, 3);
             var transactions =await unitOfWork.BookTransactionsRepository
-                .Get(p=>p.EndDate<DateTime.Now.AddDays(3),null,"Book,Member");
+                .Get(p=>p.EndDate.Date<compareDate.Date,null,"Book,Member");
             foreach (var item in transactions)
             {
+                int dayDifference = businessHelper.CalculateDayDifferenceAccordingToWorkDays(item.EndDate,DateTime.Now);
                 DailyReportItem dItem = new DailyReportItem();
                 dItem.ISDN = item.TransactionId.ToString();
                 dItem.MemberName = item.Member.Name;
@@ -71,6 +76,8 @@ namespace Business
                 dItem.CheckOutDate = item.IssueDate;
                 dItem.IsReturned = item.IsReturned;
                 dItem.LastReturnDate = item.EndDate;
+                dItem.PenaltyAmount = (!item.IsReturned && dayDifference < 0) ? businessHelper.CalculatePenalty(-dayDifference) : 0;
+                dItem.RemainingDay = dayDifference > 0 ? dayDifference.ToString() : $"Past Due {-dayDifference} days";
 
                 dailyReports.DailyReports.Add(dItem);
             }
