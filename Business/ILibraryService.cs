@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Business
 {
-    public interface IBookService
+    public interface ILibraryService
     {
-        List<BooksDto> GetAllBooks();
         List<BooksDto> SearchBooks(BookSearchDto criterias);
         Task<string> CheckOut(CheckOutDto checkOut);
+        Task<DailyReportDto> DailyReport();
     }
 }

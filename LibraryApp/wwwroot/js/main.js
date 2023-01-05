@@ -43,10 +43,11 @@ $('body').on('click', '#btn-book-checkout', function (e) {
     e.preventDefault();
     let memberId = $('#MemberId').val();
     let isdn = $('#ISDNToCeheckOut').val();
+    let endDate = $('#EndDate').val();
     $.ajax({
         type: 'Post',
         url: '/Home/CheckOut',
-        data: { MemberId: memberId, ISDNToCeheckOut: isdn },
+        data: { MemberId: memberId, ISDNToCeheckOut: isdn, EndDate: endDate },
         success: function (data) { 
             $('#myModal').modal("hide");
             $('#btn-book-search').trigger("click");

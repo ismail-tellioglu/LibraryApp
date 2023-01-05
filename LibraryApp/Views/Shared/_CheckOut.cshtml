@@ -1,12 +1,26 @@
-﻿@using Objects.Dtos
-@model CheckOutDto
+﻿@model CheckOutDto
 
-        <form asp-controller="Home" asp-action="CheckOut" method="post" id="checkout-book-form" class="form-inline">
-            <div class="form-group">
-                <label for="MemberId">Member ID:</label>
-                <input asp-for="MemberId" type="text" class="form-control" />
-                <span asp-validation-for="MemberId" class="input-error"></span>
-            </div>
-            <input asp-for="ISDNToCeheckOut" type="hidden" class="form-control" />
-            <button type="submit" class="btn btn-primary" id="btn-book-checkout">Check Out</button>
-        </form>
+<form asp-controller="Home" asp-action="CheckOut" method="post" id="checkout-book-form" class="form-inline">
+    <div class="form-group">
+        <label for="MemberId">Member ID:</label>
+        <input asp-for="MemberId" type="text" class="form-control" />
+        <span asp-validation-for="MemberId" class="input-error"></span>
+    </div>
+    <div class="form-group">
+        <label for="MemberId">Return Date:</label>
+        <input asp-for="EndDate" type="text" class="form-control" value="@Model.EndDate.ToString("dd.MM.yyyy")" />
+        <span asp-validation-for="EndDate" class="input-error"></span>
+    </div>
+    <input asp-for="ISDNToCeheckOut" type="hidden" class="form-control" />
+    <div style="text-align:center;margin-top: 10px;">
+        <button type="submit" class="btn btn-primary" id="btn-book-checkout">Check Out</button>
+    </div>
+</form>
+<script>
+    $('#EndDate').datepicker({
+        language: "tr",
+        format: "dd.mm.yyyy",
+        startDate: "@Model.StartDate.ToString("dd.MM.yyyy")",
+        endDate: "@Model.EndDate.ToString("dd.MM.yyyy")"
+    });
+</script>

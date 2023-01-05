@@ -4,6 +4,7 @@ using Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Db.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20230105110147_penaltemount_removed")]
+    partial class penaltemount_removed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,8 +123,7 @@ namespace Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BookISDN")
-                        .IsRequired()
+                    b.Property<string>("BooksISDN")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndDate")
@@ -134,7 +135,7 @@ namespace Db.Migrations
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MemberId")
+                    b.Property<int?>("MembersMemberId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ReturnDate")
@@ -142,9 +143,9 @@ namespace Db.Migrations
 
                     b.HasKey("TransactionId");
 
-                    b.HasIndex("BookISDN");
+                    b.HasIndex("BooksISDN");
 
-                    b.HasIndex("MemberId");
+                    b.HasIndex("MembersMemberId");
 
                     b.ToTable("BookTransactions");
                 });
@@ -232,38 +233,30 @@ namespace Db.Migrations
                     b.HasData(
                         new
                         {
-                            MemberId = -985252383,
-                            Name = "Herminia Howe"
+                            MemberId = 1001160879,
+                            Name = "London Crona"
                         },
                         new
                         {
-                            MemberId = 91123923,
-                            Name = "Ellie Waelchi"
+                            MemberId = 778270072,
+                            Name = "Lilian Kemmer"
                         },
                         new
                         {
-                            MemberId = 1803698711,
-                            Name = "Lyric Skiles"
+                            MemberId = 102165447,
+                            Name = "John Schuster"
                         });
                 });
 
             modelBuilder.Entity("Objects.Entities.BookTransactions", b =>
                 {
-                    b.HasOne("Objects.Entities.Books", "Book")
+                    b.HasOne("Objects.Entities.Books", null)
                         .WithMany("_BookTransactions")
-                        .HasForeignKey("BookISDN")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BooksISDN");
 
-                    b.HasOne("Objects.Entities.Members", "Member")
+                    b.HasOne("Objects.Entities.Members", null)
                         .WithMany("_BookTransactions")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-
-                    b.Navigation("Member");
+                        .HasForeignKey("MembersMemberId");
                 });
 
             modelBuilder.Entity("Objects.Entities.Books", b =>

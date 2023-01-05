@@ -50,6 +50,20 @@ namespace Db
         {
             return await dbSet.ToListAsync();
         }
+        public async Task<List<TEntity>> GetAllWithIncludesAsync(string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
+
+
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
+
+            return await query.ToListAsync();
+
+        }
         public async Task<TEntity> GetByID(object id)
         {
             return await dbSet.FindAsync(id);

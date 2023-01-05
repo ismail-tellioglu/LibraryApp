@@ -13,5 +13,6 @@ namespace Db.Interfaces
         GenericRepository<Books> BookRepository { get; }
         GenericRepository<Members> MemberRepository { get; }
         GenericRepository<BookTransactions> BookTransactionsRepository { get; }
+        GenericRepository<Holidays> HolidaysRepository { get; }
     }
 }

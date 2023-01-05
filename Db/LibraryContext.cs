@@ -18,10 +18,12 @@ namespace Db
 
             modelBuilder.Entity<Books>().HasData(InitialData.books);
             modelBuilder.Entity<Members>().HasData(InitialData.members);
+            modelBuilder.Entity<Holidays>().HasData(InitialData.holidays);
         }
 
         DbSet<Books> Books { get; set; }
         DbSet<BookTransactions> BookTransactions { get; set; }
         DbSet<Members> Members { get; set; }
+        DbSet<Holidays> Holidays { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Db
         private GenericRepository<Books> bookRepository;
         private GenericRepository<Members> memberRepository;
         private GenericRepository<BookTransactions> bookTransactionsRepository;
-
+        private GenericRepository<Holidays> holidaysRepository;
         public UnitOfWork(LibraryContext libraryContext)
         {
             context = libraryContext;
@@ -56,6 +56,19 @@ namespace Db
                     this.bookTransactionsRepository = new GenericRepository<BookTransactions>(context);
                 }
                 return bookTransactionsRepository;
+            }
+        }
+
+        public GenericRepository<Holidays> HolidaysRepository
+        {
+            get
+            {
+
+                if (this.holidaysRepository == null)
+                {
+                    this.holidaysRepository = new GenericRepository<Holidays>(context);
+                }
+                return holidaysRepository;
             }
         }
         public void Save()

@@ -9,12 +9,14 @@ namespace LibraryApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IBookService bookService;
+        private readonly ILibraryService libraryService;
+        private readonly IBusinessHelper businessHelper;
 
-        public HomeController(ILogger<HomeController> logger, IBookService bookService)
+        public HomeController(ILogger<HomeController> logger, ILibraryService bookService, IBusinessHelper helper )
         {
             _logger = logger;
-            this.bookService = bookService;
+            this.libraryService = bookService;
+            this.businessHelper = helper;
         }
 
         public IActionResult Index()
@@ -25,20 +27,22 @@ namespace LibraryApp.Controllers
         [HttpPost]
         public IActionResult SearchBooks(BookSearchDto criterias)
         {
-            var result = bookService.SearchBooks(criterias);
+            var result = libraryService.SearchBooks(criterias);
             return PartialView("~/Views/Shared/_SearchResult.cshtml",result);
         }
 
         public IActionResult CheckOut(string isdn)
         {
-            var md = new CheckOutDto { ISDNToCeheckOut = isdn };
+            var md = new CheckOutDto { ISDNToCeheckOut = isdn,
+                EndDate=businessHelper.CalculateDateAccordingToWorkDays(DateTime.Now,30),
+                StartDate=DateTime.Now};
             return PartialView("~/Views/Shared/_CheckOut.cshtml", md);
         }
 
         [HttpPost]
         public IActionResult CheckOut(CheckOutDto md)
         {
-            var result = bookService.CheckOut(md).Result;
+            var result = libraryService.CheckOut(md).Result;
             if (result == "Success")
                 return Ok();
             else

@@ -1,0 +1,47 @@
+﻿@model DailyReportDto
+@{
+    ViewData["Title"] = "Daily Report";
+}
+
+<div class="text-center">
+    <h3>Daily Report</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ISDN</th>
+                <th scope="col">Book Name</th>
+                <th scope="col">Member ID</th>
+                <th scope="col">Member Name</th>
+                <th scope="col">Check Out Date</th>
+                <th scope="col">Last Return Date</th>
+                <th scope="col">Is Returned</th>
+                <th scope="col">Penalty</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DailyReports)
+            {
+                <tr>
+                    @{
+                        <td>@item.ISDN</td>
+                        <td>@item.BookName</td>
+                        <td>@item.MemberId</td>
+                        <td>@item.MemberName</td>
+                        <td>@item.CheckOutDate.ToShortDateString()</td>
+                        <td>@item.LastReturnDate.ToShortDateString()</td>
+                        if (!item.IsReturned)
+                        {
+                            <td>No</td>
+                        }
+                        else
+                        {
+                            <td>Yes</td>
+                        }
+                        <td>@item.PenaltyAmount</td>
+                    }
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>

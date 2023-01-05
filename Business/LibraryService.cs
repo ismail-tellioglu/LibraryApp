@@ -5,19 +5,14 @@ using Objects.Entities;
 
 namespace Business
 {
-    public class BookService:IBookService
+    public class LibraryService:ILibraryService
     {
         private IUnitOfWork unitOfWork;
         private IMapper mapper;
-        public BookService(IUnitOfWork unitOfWork, IMapper mapper)
+        public LibraryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-        }
-
-        public List<BooksDto> GetAllBooks()
-        {
-            return  mapper.Map<List<Books>,List<BooksDto>>(unitOfWork.BookRepository.GetAllAsync().Result);
         }
 
         public List<BooksDto> SearchBooks(BookSearchDto criterias)
@@ -43,11 +38,11 @@ namespace Business
             BookTransactions transaction = new BookTransactions
             {
                 TransactionId = new Guid(),
-                EndDate = DateTime.Now.AddDays(30),
+                EndDate = checkOut.EndDate,
                 IsReturned = false,
                 IssueDate = DateTime.Now,
-                PenaltyAmount = 0
-            
+                BookISDN= book.ISDN,
+                MemberId=member.MemberId
             };
             unitOfWork.BookTransactionsRepository.Insert(transaction);
             unitOfWork.Save();
@@ -58,6 +53,28 @@ namespace Business
             unitOfWork.Save();
 
             return "Success";
+        }
+
+        public async Task<DailyReportDto> DailyReport()
+        {
+            DailyReportDto dailyReports = new DailyReportDto(); 
+            var transactions =await unitOfWork.BookTransactionsRepository
+                .Get(p=>p.EndDate<DateTime.Now.AddDays(3),null,"Book,Member");
+            foreach (var item in transactions)
+            {
+                DailyReportItem dItem = new DailyReportItem();
+                dItem.ISDN = item.TransactionId.ToString();
+                dItem.MemberName = item.Member.Name;
+                dItem.MemberId = item.Member.MemberId;
+                dItem.BookName = item.Book.Title;
+                dItem.ISDN = item.Book.ISDN;
+                dItem.CheckOutDate = item.IssueDate;
+                dItem.IsReturned = item.IsReturned;
+                dItem.LastReturnDate = item.EndDate;
+
+                dailyReports.DailyReports.Add(dItem);
+            }
+            return dailyReports;
         }
 
     }

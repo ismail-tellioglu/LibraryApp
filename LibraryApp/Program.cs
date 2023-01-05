@@ -19,7 +19,8 @@ internal class Program
 
         builder.Services.AddDbContext<LibraryContext>(options => options.UseSqlServer(connection));
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IBookService, BookService>();
+        builder.Services.AddScoped<ILibraryService, LibraryService>();
+        builder.Services.AddScoped<IBusinessHelper, BusinessHelper>();
         builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         var app = builder.Build();

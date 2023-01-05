@@ -4,6 +4,7 @@ using Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Db.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20230105120348_transaction_update")]
+    partial class transaction_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,11 +124,14 @@ namespace Db.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BookISDN")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ISDN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsReturned")
                         .HasColumnType("bit");
@@ -232,18 +237,18 @@ namespace Db.Migrations
                     b.HasData(
                         new
                         {
-                            MemberId = -985252383,
-                            Name = "Herminia Howe"
+                            MemberId = 1059032368,
+                            Name = "Juston Treutel"
                         },
                         new
                         {
-                            MemberId = 91123923,
-                            Name = "Ellie Waelchi"
+                            MemberId = -1928409352,
+                            Name = "Fay Hammes"
                         },
                         new
                         {
-                            MemberId = 1803698711,
-                            Name = "Lyric Skiles"
+                            MemberId = 704951729,
+                            Name = "Bernita Denesik"
                         });
                 });
 
@@ -251,9 +256,7 @@ namespace Db.Migrations
                 {
                     b.HasOne("Objects.Entities.Books", "Book")
                         .WithMany("_BookTransactions")
-                        .HasForeignKey("BookISDN")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookISDN");
 
                     b.HasOne("Objects.Entities.Members", "Member")
                         .WithMany("_BookTransactions")

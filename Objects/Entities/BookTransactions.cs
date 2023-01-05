@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,11 @@ namespace Objects.Entities
 
         public DateTime? ReturnDate { get; set; }
 
-        public decimal PenaltyAmount { get; set; }
+        public string BookISDN { get; set; }
+        public Books Book { get; set; }
+
+        public int MemberId { get; set; }
+        public Members Member { get; set; }
 
     }
 }
