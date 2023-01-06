@@ -18,15 +18,13 @@ namespace Business
             this.businessHelper = helper;
         }
 
-        public List<BooksDto> SearchBooks(BookSearchDto criterias)
+        public async Task<List<BooksDto>> SearchBooks(BookSearchDto criterias)
         {
-           /* List<Books> matchedBooks;
-            if(!string.IsNullOrEmpty(criterias.BookName) && !string.IsNullOrEmpty(criterias.ISDN) &&!string.IsNullOrEmpty(criterias.Author))*/
-            var matchedBooks= unitOfWork.BookRepository.Get(p =>  (criterias.ISDN !=null && p.ISDN.ToUpper().Contains(criterias.ISDN.ToUpper()))
+            var matchedBooks= await unitOfWork.BookRepository.Get(p =>  (criterias.ISDN !=null && p.ISDN.ToUpper().Contains(criterias.ISDN.ToUpper()))
             || (criterias.Author!=null && p.AuthorName.ToUpper().Contains(criterias.Author.ToUpper())) 
-            || (criterias.BookName!=null && p.Title.ToUpper().Contains(criterias.BookName.ToUpper()))).Result.ToList();
+            || (criterias.BookName!=null && p.Title.ToUpper().Contains(criterias.BookName.ToUpper())));
 
-            return mapper.Map<List<Books>, List<BooksDto>>(matchedBooks);
+            return mapper.Map<List<Books>, List<BooksDto>>(matchedBooks.ToList());
         }
         public async Task<string> CheckOut(CheckOutDto checkOut)
         {
@@ -48,11 +46,7 @@ namespace Business
                 MemberId=member.MemberId
             };
             unitOfWork.BookTransactionsRepository.Insert(transaction);
-            unitOfWork.Save();
-
             book.IsBooked = true;
-            book._BookTransactions.Add(transaction);
-            member._BookTransactions.Add(transaction);
             unitOfWork.Save();
 
             return "Success";
@@ -61,13 +55,13 @@ namespace Business
         public async Task<DailyReportDto> DailyReport()
         {
             DailyReportDto dailyReports = new DailyReportDto();
-            DateTime compareDate = businessHelper.CalculateDateAccordingToWorkDays(DateTime.Now, 3);
+            DateTime compareDate = businessHelper.CalculateDateAccordingToWorkDays(DateTime.Now, 2);
             var transactions =await unitOfWork.BookTransactionsRepository
-                .Get(p=>p.EndDate.Date<compareDate.Date,null,"Book,Member");
+                .Get(p=>p.EndDate.Date<=compareDate.Date,null, "Book,Member");//orderBy: q => q.OrderByDescending(d => d.Book.Title)
             foreach (var item in transactions)
             {
-                int dayDifference = businessHelper.CalculateDayDifferenceAccordingToWorkDays(item.EndDate,DateTime.Now);
                 DailyReportItem dItem = new DailyReportItem();
+                dItem.RemainingNum = businessHelper.CalculateDayDifferenceAccordingToWorkDays(item.EndDate, DateTime.Now);
                 dItem.ISDN = item.TransactionId.ToString();
                 dItem.MemberName = item.Member.Name;
                 dItem.MemberId = item.Member.MemberId;
@@ -76,11 +70,12 @@ namespace Business
                 dItem.CheckOutDate = item.IssueDate;
                 dItem.IsReturned = item.IsReturned;
                 dItem.LastReturnDate = item.EndDate;
-                dItem.PenaltyAmount = (!item.IsReturned && dayDifference < 0) ? businessHelper.CalculatePenalty(-dayDifference) : 0;
-                dItem.RemainingDay = dayDifference > 0 ? dayDifference.ToString() : $"Past Due {-dayDifference} days";
+                dItem.PenaltyAmount = (!item.IsReturned && dItem.RemainingNum < 0) ? businessHelper.CalculatePenalty(-dItem.RemainingNum) : 0;
+                dItem.RemainingDay = dItem.RemainingNum > 0 ? dItem.RemainingNum.ToString() : $"Past Due {-dItem.RemainingNum} days";
 
                 dailyReports.DailyReports.Add(dItem);
             }
+            dailyReports.DailyReports = dailyReports.DailyReports.OrderBy(p => p.RemainingNum).ToList();
             return dailyReports;
         }
 

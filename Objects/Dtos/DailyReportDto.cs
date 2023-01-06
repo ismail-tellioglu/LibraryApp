@@ -26,5 +26,6 @@ namespace Objects.Dtos
         public bool IsReturned { get; set; }
         public decimal PenaltyAmount { get; set; }
         public string RemainingDay { get; set; }
+        public int RemainingNum { get; set; }
     }
 }

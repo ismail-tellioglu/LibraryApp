@@ -25,13 +25,13 @@ namespace LibraryApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SearchBooks(BookSearchDto criterias)
+        public async Task<IActionResult> SearchBooks(BookSearchDto criterias)
         {
-            var result = libraryService.SearchBooks(criterias);
+            var result = await libraryService.SearchBooks(criterias);
             return PartialView("~/Views/Shared/_SearchResult.cshtml",result);
         }
 
-        public IActionResult CheckOut(string isdn)
+        public async Task<IActionResult> CheckOut(string isdn)
         {
             var md = new CheckOutDto { ISDNToCeheckOut = isdn,
                 EndDate=businessHelper.CalculateDateAccordingToWorkDays(DateTime.Now,30),
@@ -40,9 +40,9 @@ namespace LibraryApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult CheckOut(CheckOutDto md)
+        public async Task<IActionResult> CheckOut(CheckOutDto md)
         {
-            var result = libraryService.CheckOut(md).Result;
+            var result = await libraryService.CheckOut(md);
             if (result == "Success")
                 return Ok();
             else

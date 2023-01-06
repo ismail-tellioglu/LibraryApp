@@ -17,9 +17,9 @@ namespace LibraryApp.Controllers
             this.businessHelper = helper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            DailyReportDto md = libraryService.DailyReport().Result;
+            DailyReportDto md = await libraryService.DailyReport();
             return View(md);
         }
     }

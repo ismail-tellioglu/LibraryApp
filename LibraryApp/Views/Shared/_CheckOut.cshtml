@@ -3,7 +3,7 @@
 <form asp-controller="Home" asp-action="CheckOut" method="post" id="checkout-book-form" class="form-inline">
     <div class="form-group">
         <label for="MemberId">Member ID:</label>
-        <input asp-for="MemberId" type="text" class="form-control" />
+        <input asp-for="MemberId" type="text" class="form-control" value=""/>
         <span asp-validation-for="MemberId" class="input-error"></span>
     </div>
     <div class="form-group">

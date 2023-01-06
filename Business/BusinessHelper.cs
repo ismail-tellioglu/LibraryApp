@@ -39,13 +39,17 @@ namespace Business
                 coefficient = -1;
             while (date1.Date != date2.Date)
             {
-                if (date1 < date2)
-                    date1 = date1.AddDays(1);
-                else
-                    date1 = date1.AddDays(-1);
-                if (!holidays.Where(p => p.Date == date1.Date).Any() && date1.DayOfWeek != DayOfWeek.Saturday && date1.DayOfWeek != DayOfWeek.Sunday)
+                try
                 {
-                    count++;
+                    date1 = date1.AddDays(1 * -coefficient);
+                    if (!holidays.Where(p => p.Date == date1.Date).Any() && date1.DayOfWeek != DayOfWeek.Saturday && date1.DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        count++;
+                    }
+                }
+                catch (Exception ex)
+                {
+
                 }
             }
             return count*coefficient;
@@ -53,25 +57,23 @@ namespace Business
         public Decimal CalculatePenalty(int dayCount)
         {
             decimal coefficient = 0.2M;
+            //according to request document at first day Fibonacci (0) is used. That is why daycount-1 used for fiboncacci calculation
             if (dayCount > 1)
-                return GetFibonacciSum(dayCount) * coefficient + CalculatePenalty(dayCount - 1);
+                return GetFibonacciSum(dayCount - 1) * coefficient + CalculatePenalty(dayCount - 1);
+            else if (dayCount == 1)
+                return GetFibonacciSum(dayCount - 1) * coefficient;
             else
-                return GetFibonacciSum(dayCount) * coefficient;
+                return 0;
         }
 
-        private int GetFibonacciSum(int n)
+        private  int GetFibonacciSum(int n)
         {
-            int number = n - 1; 
-            int[] fib = new int[number + 1];
-            fib[0] = 0;
-            if (n > 1)
-                fib[1] = 1;
-            for (int i = 2; i <= number; i++)
-            {
-                fib[i] = fib[i - 2] + fib[i - 1];
-            }
-            return fib[number];
+            if (n == 0)
+                return 0;
+            else if (n == 1)
+                return 1;
+            else
+                return GetFibonacciSum(n - 1) + GetFibonacciSum(n - 2);
         }
-
     }
 }

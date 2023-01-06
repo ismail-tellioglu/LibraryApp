@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace Db
 {
-    public class GenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity>: IGenericRepository<TEntity> where TEntity : class
     {
         internal LibraryContext context;
         internal DbSet<TEntity> dbSet;
@@ -50,20 +50,7 @@ namespace Db
         {
             return await dbSet.ToListAsync();
         }
-        public async Task<List<TEntity>> GetAllWithIncludesAsync(string includeProperties = "")
-        {
-            IQueryable<TEntity> query = dbSet;
 
-
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            return await query.ToListAsync();
-
-        }
         public async Task<TEntity> GetByID(object id)
         {
             return await dbSet.FindAsync(id);

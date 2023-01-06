@@ -5,7 +5,7 @@
     let isdn = $('#ISDN').val();
 
     if (!bookName && !author && !isdn) {
-        $("#modal-content").html("Please fill at least one of inputs fields");
+        $("#modal-content").html("Please fill at least one of input fields");
         $(".modal-title").html("Warning");
         $('#myModal').modal("show");
         return;

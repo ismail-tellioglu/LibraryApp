@@ -44,7 +44,7 @@ namespace Db.Migrations
             migrationBuilder.InsertData(
                 table: "Members",
                 columns: new[] { "MemberId", "Name" },
-                values: new object[] { -985252383, "Herminia Howe" });
+                values: new object[] { 985252383, "Herminia Howe" });
 
             migrationBuilder.InsertData(
                 table: "Members",

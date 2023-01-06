@@ -10,7 +10,7 @@ namespace Business
 {
     public interface ILibraryService
     {
-        List<BooksDto> SearchBooks(BookSearchDto criterias);
+        Task<List<BooksDto>> SearchBooks(BookSearchDto criterias);
         Task<string> CheckOut(CheckOutDto checkOut);
         Task<DailyReportDto> DailyReport();
     }

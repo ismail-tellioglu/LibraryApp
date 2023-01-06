@@ -33,7 +33,7 @@ namespace Db
 
             var memberFaker = new Faker<Members>()
                .RuleFor(b => b.Name, f => f.Name.FullName())
-               .RuleFor(b => b.MemberId, f => f.Random.Int(1));
+               .RuleFor(b => b.MemberId, f => f.Random.Int(1,int.MaxValue));
             members = memberFaker.Generate(count);
 
             var holidaysList = new List<DateTime> {new DateTime(2023,1,1), new DateTime(2023,4,21),new DateTime(2023,4,22),
